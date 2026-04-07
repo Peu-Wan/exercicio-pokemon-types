@@ -20,13 +20,14 @@ export async function catchThemAll(_req:Request, res:Response){
 
 export async function catchByName(req: Request, res: Response) {
     try {
-            const name: string = req.body// Extract name from request body
+            const name: string = req.body.name; // Extract name from request body
 
         const pokemons: Pokemon[] = await readJson();        // Filter Pokémon by name
         const filteredPokemons = pokemons.filter((pokemon) => pokemon.name.toLowerCase().includes(name.toLowerCase()))
 
         // Return the filtered Pokémon
         return res.status(200).json(filteredPokemons);
+
     } catch (error) {
         console.error("Error in catchByName:", error);
         return res.status(500).send("Failed to fetch Pokémon by name.");
@@ -35,7 +36,7 @@ export async function catchByName(req: Request, res: Response) {
 
 export async function testFilterByName(req: Request, res: Response) {
     try {
-        const name: string = req.params.name || ''; 
+        const name: string = "char"; 
 
         const pokemons: Pokemon[] = await readJson(); 
 
@@ -44,6 +45,9 @@ export async function testFilterByName(req: Request, res: Response) {
         const filteredPokemons = searchTerm ?  pokemons.filter(pokemon =>
         pokemon.name.toLowerCase().includes(searchTerm) 
         ): pokemons;
+
+        console.log(name);
+
         
 
         // Return the filtered Pokémon

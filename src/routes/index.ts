@@ -6,5 +6,5 @@ export const router = Router();
 
 router.get("/",catchThemAll);
 
-router.get("/filtro/:name",testFilterByName);
+router.get("/pokemon/",testFilterByName);
 
