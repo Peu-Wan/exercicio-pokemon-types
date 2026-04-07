@@ -20,7 +20,7 @@ export async function catchThemAll(_req:Request, res:Response){
 
 export async function catchByName(req: Request, res: Response) {
     try {
-            const name: string = req.body.name; // Extract name from request body
+            const name: string = req.body.name; 
 
         const pokemons: Pokemon[] = await readJson();        // Filter Pokémon by name
         const filteredPokemons = pokemons.filter((pokemon) => pokemon.name.toLowerCase().includes(name.toLowerCase()))
@@ -36,11 +36,16 @@ export async function catchByName(req: Request, res: Response) {
 
 export async function testFilterByName(req: Request, res: Response) {
     try {
-        const name: string = "char"; 
+        const name = req.query.name; 
 
-        const pokemons: Pokemon[] = await readJson(); 
+       if (typeof name !== 'string') {
+    return res.status(400).json({ error: "O parâmetro 'name' é obrigatório e deve ser uma string." });
+}
 
-        const searchTerm = name.toLowerCase().trim();
+const pokemons: Pokemon[] = await readJson();
+
+// 2. Agora é seguro usar os métodos de string
+const searchTerm = name.toLowerCase().trim();
 
         const filteredPokemons = searchTerm ?  pokemons.filter(pokemon =>
         pokemon.name.toLowerCase().includes(searchTerm) 
