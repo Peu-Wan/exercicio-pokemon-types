@@ -1,12 +1,11 @@
 type Pokemon = {
-    id: number
-    name : string
-    types : string[] 
-}
+  id: number;
+  name: string;
+  types: string[];
+};
 
 interface PokemonResponse extends Pokemon {
-    weakness : string[]  
+  weakness: string[];
 }
 
-export {Pokemon,PokemonResponse}
-
+export { Pokemon, PokemonResponse };

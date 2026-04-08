@@ -5,5 +5,4 @@ const app = express();
 app.use(json());
 app.use("/", index);
 
-
 export default app;

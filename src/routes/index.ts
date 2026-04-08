@@ -1,10 +1,8 @@
 import Router from "express";
-import { Response, Request } from "express";
-import {catchThemAll,catchByName,testFilterByName} from "../controller";
+import { catchThemAll, catchByName, testFilterByName } from "../controller";
 
 export const router = Router();
 
-router.get("/",catchThemAll);
+router.get("/", catchThemAll);
 
-router.get("/pokemon/",testFilterByName);
-
+router.get("/pokemon/", testFilterByName);
