@@ -67,13 +67,22 @@ export async function testFilterByName(req: Request, res: Response) {
   }
 }
 
-export async function catchByType(req: Request, res: Response) {
+export async function testCatchByType(req: Request, res: Response) {
   try {
-    const type: string = req.body.type;
+    const type = req.query.type 
+
+    if(typeof type !== "string"){
+        return 
+        res.status(400).json({
+          error: "O parametro 'type' é obrigatório, e precisa ser uma string"
+        })
+    }
     const pokemons: Pokemon[] = await readJson();
 
+    const searchTerm = type.toLowerCase().trim();
+
     const filteredPokemons = pokemons.filter((pokemon) =>
-      pokemon.types.includes(type),
+      pokemon.types.includes(searchTerm),
     );
 
     return res.status(200).json(filteredPokemons);
