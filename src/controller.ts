@@ -64,6 +64,65 @@ export async function catchByName(req: Request, res: Response) {
   }
 }
 
+export async function catchByWeakness(req: Request, res: Response) {
+  try {
+    const weakness = req.body.weaknesses
+
+    if(typeof weakness !== "string"){
+        return 
+        res.status(400).json({
+          error: "O parametro 'weakness' é obrigatório, e precisa ser uma string"
+        })
+    }
+    const pokemons = await getPokemonWeaknesses();
+
+    const searchTerm = weakness.toLowerCase().trim();
+
+    if (!pokemons) {
+      return res.status(404).json({ error: "No Pokémon found." });
+    }
+
+    const filteredPokemons = pokemons.filter((pokemon) =>
+      pokemon.weakness.includes(searchTerm),
+    );
+
+    return res.status(200).json(filteredPokemons);
+  } catch (error) {
+    console.error("Error in catchByType:", error);
+    return res.status(500).send("Failed to fetch Pokémon by type.");
+  }
+};
+
+export async function catchByType(req: Request, res: Response) {
+  try {
+    const type = req.body.type 
+
+    if(typeof type !== "string"){
+        return 
+        res.status(400).json({
+          error: "O parametro 'type' é obrigatório, e precisa ser uma string"
+        })
+    }
+    const pokemons = await getPokemonWeaknesses();
+
+    if (!pokemons) {
+      return res.status(404).json({ error: "No Pokémon found." });
+    }
+      
+    const searchTerm = type.toLowerCase().trim();
+
+    const filteredPokemons = pokemons.filter((pokemon) =>
+      pokemon.types.includes(searchTerm),
+    );
+
+    return res.status(200).json(filteredPokemons);
+  } catch (error) {
+    console.error("Error in catchByType:", error);
+    return res.status(500).send("Failed to fetch Pokémon by type.");
+  }
+};
+
+
 export async function testFilterByName(req: Request, res: Response) {
   try {
     const name = req.query.name;
