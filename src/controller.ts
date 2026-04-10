@@ -3,23 +3,55 @@ import { Pokemon, PokemonResponse } from "./types";
 import { getTypeWeaknesses, readJson } from "./services";
 import { typeWeaknesses } from "./typesDicionary";
 
-export async function catchThemAll(_req: Request, res: Response) {
+export async function getPokemonWeaknesses() {
   try {
     const pokemons: Pokemon[] = await readJson();
+    const pokemonWithWeakness: PokemonResponse[] = getTypeWeaknesses(pokemons);
 
-    const pokemonWithWeakness = getTypeWeaknesses(pokemons);
+    if (pokemonWithWeakness.length === 0) {
+      return [];
+    }
 
-    return res.status(200).json(pokemonWithWeakness);
+    return pokemonWithWeakness;
+    
+  } catch (error) {
+    
+    console.error("Error fetching weaknesses:", error);
+
+  }
+}
+
+
+export async function catchThemAll(_req: Request, res: Response) {
+  try {
+    const pokemons = await getPokemonWeaknesses();
+
+    return res.status(200).json(pokemons);
   } catch (error) {
     res.status(500).send("We cannot catch then all :( ");
   }
 }
 
 export async function catchByName(req: Request, res: Response) {
-  try {
+  try { 
     const name: string = req.body.name;
 
-    const pokemons: Pokemon[] = await readJson(); // Filter Pokémon by name
+    // Corrigindo o uso de await para resolver a Promise corretamente
+    const pokemons = await getPokemonWeaknesses();
+
+    if (!pokemons) {
+      return res.status(404).json({ error: "No Pokémon found." });
+    }
+
+    
+    if (typeof name !== "string") {
+      return res
+        .status(400)
+        .json({
+          error: "O parâmetro 'name' é obrigatório e deve ser uma string.",
+        });
+    }
+
     const filteredPokemons = pokemons.filter((pokemon) =>
       pokemon.name.toLowerCase().includes(name.toLowerCase()),
     );
@@ -44,8 +76,11 @@ export async function testFilterByName(req: Request, res: Response) {
         });
     }
 
-    const pokemons: Pokemon[] = await readJson();
+    const pokemons = await getPokemonWeaknesses();
 
+    if (!pokemons) {
+      return res.status(404).json({ error: "No Pokémon found." });
+    }
     // 2. Agora é seguro usar os métodos de string
     const searchTerm = name.toLowerCase().trim();
 
@@ -54,8 +89,6 @@ export async function testFilterByName(req: Request, res: Response) {
           pokemon.name.toLowerCase().includes(searchTerm),
         )
       : pokemons;
-
-    console.log(name);
 
     // Return the filtered Pokémon
     return res.status(200).json(filteredPokemons);
@@ -77,12 +110,45 @@ export async function testCatchByType(req: Request, res: Response) {
           error: "O parametro 'type' é obrigatório, e precisa ser uma string"
         })
     }
-    const pokemons: Pokemon[] = await readJson();
+    const pokemons = await getPokemonWeaknesses();
 
+    if (!pokemons) {
+      return res.status(404).json({ error: "No Pokémon found." });
+    }
+      
     const searchTerm = type.toLowerCase().trim();
 
     const filteredPokemons = pokemons.filter((pokemon) =>
       pokemon.types.includes(searchTerm),
+    );
+
+    return res.status(200).json(filteredPokemons);
+  } catch (error) {
+    console.error("Error in catchByType:", error);
+    return res.status(500).send("Failed to fetch Pokémon by type.");
+  }
+};
+
+export async function testCatchByWeakness(req: Request, res: Response) {
+  try {
+    const weakness = req.query.weakness
+
+    if(typeof weakness !== "string"){
+        return 
+        res.status(400).json({
+          error: "O parametro 'weakness' é obrigatório, e precisa ser uma string"
+        })
+    }
+    const pokemons = await getPokemonWeaknesses();
+
+    const searchTerm = weakness.toLowerCase().trim();
+
+    if (!pokemons) {
+      return res.status(404).json({ error: "No Pokémon found." });
+    }
+
+    const filteredPokemons = pokemons.filter((pokemon) =>
+      pokemon.weakness.includes(searchTerm),
     );
 
     return res.status(200).json(filteredPokemons);
