@@ -105,7 +105,8 @@ export async function testCatchByType(req: Request, res: Response) {
     const type = req.query.type 
 
     if(typeof type !== "string"){
-        return  res.status(400).json({
+        return 
+        res.status(400).json({
           error: "O parametro 'type' é obrigatório, e precisa ser uma string"
         })
     }
@@ -133,7 +134,8 @@ export async function testCatchByWeakness(req: Request, res: Response) {
     const weakness = req.query.weakness
 
     if(typeof weakness !== "string"){
-        return  res.status(400).json({
+        return 
+        res.status(400).json({
           error: "O parametro 'weakness' é obrigatório, e precisa ser uma string"
         })
     }

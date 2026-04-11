@@ -4,8 +4,8 @@
   "description": "```\r const pokemons = [\r {\r   name: \"pikachu\",\r   types: [\"eletric\"]\r },\r {\r   name: \"gabite\",\r   types: [\"dragon\", \"ground\"]\r },\r ]\r ```",
   "main": "server.ts",
   "scripts": {
-    "start": "nodemon --exec ts-node src/server.ts",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/server.ts --resolveJsonModule",
+    "start": "nodemon --exec ts-node ./server.ts",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node ./server.ts --resolveJsonModule",
     "build": "tsc"
   },
   "repository": {
