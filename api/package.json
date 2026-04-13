@@ -25,9 +25,11 @@
   "homepage": "https://github.com/aceleradora-TW/exercicio-pokemon-types#readme",
   "dependencies": {
     "axios": "^1.6.8",
+    "cors": "^2.8.6",
     "express": "^4.19.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.12",
     "nodemon": "^3.1.0",
